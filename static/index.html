@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Parent–Child Emotional Simulation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #ede7f6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      flex-direction: column;
+      margin: 0;
+      color: #333;
+    }
+
+    #container {
+      width: 90%;
+      max-width: 620px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      animation: fadeIn 1.2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      margin-bottom: 10px;
+      font-size: 26px;
+      color: #2c3e50;
+    }
+
+    #desc {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    #tree {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      margin: 25px 0;
+    }
+
+    .node {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transition: all 0.4s ease;
+    }
+
+    .stress-level {
+      font-size: 34px;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+
+    #buttons {
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      border-radius: 30px;
+      padding: 12px 26px;
+      font-size: 15px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s ease;
+      margin: 8px;
+    }
+
+    #btn-simulate {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+    }
+
+    #btn-reset {
+      background: transparent;
+      border: 2px solid #ccc;
+      color: #444;
+    }
+
+    #btn-auto {
+      background: linear-gradient(135deg, #43cea2, #185a9d);
+      color: white;
+    }
+
+    #btn-auto.active {
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #43cea2; }
+      to { box-shadow: 0 0 20px #185a9d; }
+    }
+
+    #event {
+      background: rgba(240, 240, 240, 0.8);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 15px;
+      font-weight: 500;
+      font-size: 16px;
+      color: #444;
+      min-height: 25px;
+      transition: all 0.4s ease;
+    }
+
+    #event.fade {
+      animation: fadeInText 0.6s ease;
+    }
+
+    @keyframes fadeInText {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 🌈 Color Legend (Stress Indicator) */
+    #color-legend {
+      width: 100%;
+      height: 14px;
+      border-radius: 7px;
+      background: linear-gradient(to right, #4caf50, #ffeb3b, #f44336);
+      margin: 15px 0;
+      box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    }
+
+    .legend-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #555;
+      margin-top: 5px;
+    }
+
+    #log {
+      margin-top: 15px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 12px;
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+      color: #555;
+      height: 120px;
+      overflow-y: auto;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .log-entry {
+      margin: 4px 0;
+      padding-left: 10px;
+      border-left: 3px solid #6c63ff;
+      animation: fadeInText 0.5s ease;
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 14px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="container">
+    <h1>🌳 Parent–Child Emotional Simulation</h1>
+    <p id="desc">
+      This model visualizes how stress and empathy shift between a parent and child during exam preparation.
+      Each simulation step represents a daily emotional event — showing how communication can heal or strain their relationship.
+    </p>
+
+    <div id="tree">
+      <div id="parent" class="node" style="background: #4caf50;">
+        Parent<span class="stress-level">0</span>
+      </div>
+      <div id="child" class="node" style="background: #4caf50;">
+        Child<span class="stress-level">0</span>
+      </div>
+    </div>
+
+    <!-- 🌈 Color Legend -->
+    <div id="color-legend"></div>
+    <div class="legend-labels">
+      <span>Calm</span>
+      <span>Moderate Stress</span>
+      <span>High Stress</span>
+    </div>
+
+    <div id="buttons">
+      <button id="btn-simulate" onclick="simulate()">Simulate Step</button>
+      <button id="btn-reset" onclick="reset()">Reset</button>
+      <button id="btn-auto" onclick="autoSimulate()">Auto Simulate</button>
+    </div>
+
+    <p id="event">Click "Simulate Step" to begin.</p>
+    <div id="log"></div>
+  </div>
+
+  <footer>Developed by Akriti Bhardwaj | ADSA Project 2025</footer>
+
+  <script>
+    const parentDiv = document.getElementById("parent");
+    const childDiv = document.getElementById("child");
+    const eventText = document.getElementById("event");
+    const logBox = document.getElementById("log");
+    const autoBtn = document.getElementById("btn-auto");
+    let autoMode = null;
+
+    function getColor(stress) {
+      const clamped = Math.max(0, Math.min(100, stress));
+      const percent = clamped / 100;
+      const r = Math.round(255 * percent);
+      const g = Math.round(255 * (1 - percent));
+      return `rgb(${r},${g},0)`;
+    }
+
+    async function fetchState() {
+      const res = await fetch("/get_state");
+      const data = await res.json();
+      updateNodes(data);
+    }
+
+    async function simulate() {
+      const res = await fetch("/simulate", { method: "POST" });
+      const data = await res.json();
+      updateNodes(data.state);
+      showEvent(data.event.event);
+    }
+
+    async function reset() {
+      const res = await fetch("/reset", { method: "POST" });
+      const data = await res.json();
+      updateNodes(data.state);
+      showEvent("Simulation reset to initial emotional state.");
+      logBox.innerHTML = "";
+    }
+
+    function updateNodes(data) {
+      const pStress = Math.round(data.Parent.stress);
+      const cStress = Math.round(data.Child.stress);
+      parentDiv.style.backgroundColor = getColor(pStress);
+      childDiv.style.backgroundColor = getColor(cStress);
+      parentDiv.innerHTML = `Parent<span class="stress-level">${pStress}</span>`;
+      childDiv.innerHTML = `Child<span class="stress-level">${cStress}</span>`;
+    }
+
+    function showEvent(message) {
+      eventText.innerText = `Event: ${message}`;
+      eventText.classList.add("fade");
+      setTimeout(() => eventText.classList.remove("fade"), 600);
+
+      const entry = document.createElement("div");
+      entry.classList.add("log-entry");
+      entry.textContent = message;
+      logBox.prepend(entry);
+    }
+
+    function autoSimulate() {
+      if (autoMode) {
+        clearInterval(autoMode);
+        autoMode = null;
+        autoBtn.classList.remove("active");
+        showEvent("Auto-simulation stopped.");
+      } else {
+        autoMode = setInterval(simulate, 2000);
+        autoBtn.classList.add("active");
+        showEvent("Auto-simulation running...");
+      }
+    }
+
+    fetchState();
+  </script>
+</body>
+</html>
