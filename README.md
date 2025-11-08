@@ -102,7 +102,4 @@ Your support motivates future innovation 💫
 
 ---
 
-And that’s it, Akriti! 🌟  
-After you commit, your GitHub project will look *clean, modern, and professional* — just like a portfolio-ready open-source project 💻✨  
 
-Would you like me to design a **small banner (project header image)** next that you can add to the top of your README (like a mini title card)? It’ll make it look even cooler 😍
